@@ -1,0 +1,53 @@
+The PicoHarp DLL is written in C and compiled with Microsoft Visual C++.
+
+How do I call a DLL from VB?
+
+Basically, you declare a DLL procedure which you can call in your VB program which in turn passes data to and/or retrieves data from the
+DLL. You should read the section of the VB manual that talks about calling DLLs ("Chapter 24 Calling Procedures in DLLs" in the VB 3.0
+Programmer's Guide).  Using DLLs (e.g. many of the Windows API functions) is quite easy, once you learn how to call them.
+
+Tips for calling DLLs (such as the Windows API)
+
+   1.Using the BYVAL keyword is critical. Using it when you're supposed to call by reference and (more common) not using it when
+     you are to give a value to the external function are the single most common mistakes. Wrong calling convention can often result in a
+     General Protection Fault (GPF) or, even worse, corruption of another applications' data. 
+   2.Check return and parameter types. For return types, a C function declared as "void" means you use a Sub not a Function.Initialize
+     strings by padding it to the necessary length! If you pass a string that is too short to the API it will happily write past the end of the
+     string and possibly corrupt data.Use Option Explicit. A typing error that results in a bug in the VB source will occasionally cause a
+     GPF when you call external code. Check parameter values as there is no type checking outside VB. If you
+     make a mistake, you'll often get a GPF. 
+   3.Save before you run! You may even need to restart Windows after a GPF, since DLL's often aren't unloaded properly. As a
+     second option you can check out WPS (Windows Process Status) which is distributed with VB/Pro and placed in the CDK
+     directory. This utility allows you to kick out any module (EXE, DLL) from memory (shooting yourself in the foot if you want to.
+     WPS is a nice way to find out what DLLs are actually used, but save your work first!).
+
+
+Fundamental types  
+
+ C types                        Size in bytes                                          Visual Basic types
+ Char                                	1                                                    	String *1	(also Byte)
+ Integer                            	4                                                      	Long
+ Boolean                            	4                                                     	Long
+ Int	                           	4                                                   	Long
+ Float			4				Single
+ Double                            	8                                                    	Double
+ 
+ 
+Function declarations 
+
+The C DLL routines are called by using the following syntax: 
+
+Declare Function "name" Lib "library name" Alias "decorated name" (arguments)  As return type
+
+In C, pointers are used to pass arguments by reference (e.g., double *xsd, Integer *nvalid, double x[], etc.); here
+the notation [] is used to denote an array argument. 
+
+When arguments are passed by value in C the syntax type variable name (e.g., Integer n, double x, etc.) is used. 
+
+In Visual Basic, by default, all arguments are passed by reference; the keyword ByVal is required to pass 
+an argument by value.
+
+
+
+
+
